@@ -1,0 +1,54 @@
+/*Feed from NBA.com*/
+div.pane-aggregator-feed-1 li {
+  list-style-type: none;
+}
+div.pane-aggregator-feed-1 li:nth-child(odd) {
+    background-color: #eeeeee;
+}
+div.pane-aggregator-feed-1 li:nth-child(even) {
+    background-color: #969690;
+}
+div.pane-aggregator-feed-1 .more-link {
+  display: none;
+}
+div.pane-aggregator-feed-1 li a {
+  padding-left: 1%;
+}
+
+h1#page-title {
+  display: inline-table;
+}
+/*Frontpage*/
+div.panels-flexible-region-2-twitter,
+div.panels-flexible-region-2-chat {
+  top: -19px;
+  position: relative;
+}
+div.shoutbox-all-shouts {
+  display: none;
+}
+div.pane-content .shoutbox-add-form input#edit-message {
+  width: 50%;
+}
+div.shoutbox-add-form .fieldset-wrapper {
+  margin: 0;
+}
+div.shoutbox-add-form .form-wrapper {
+  margin-top: 0;
+  top: 0;
+  margin-bottom: 0;
+}
+div.pane-content #shoutbox-body {
+  height: 292px;
+}
+
+#block-superfish-1 li a {
+  font-weight: bold;
+}
+div.pane-dagens-billet-view .more-link {
+  display: none;
+}
+#content div.panels-flexible-region-2-center h2.pane-title,
+#page-wrapper #content .pane-blogs h2.pane-title {
+  font-size: 2.8em;
+}

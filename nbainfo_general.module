@@ -1,0 +1,53 @@
+<?php 
+function nbainfo_general_block_info() {    
+  $blocks['nba_info_score_block'] = array(
+    // info: The name of the block.
+    'info' => t('Custom nbainfo block feed'),
+  );
+  $blocks['livescore_link'] = array(
+    // info: The name of the block.
+    'info' => t('Livescore link'),
+  );
+
+ return $blocks;
+}
+function nbainfo_general_block_view($delta = '') {
+  // The $delta parameter tells us which block is being requested.
+  switch ($delta) {
+    case 'nba_info_score_block':
+      // Create your block content here
+      $block['subject'] = '';
+      $block['content'] = nba_info_get_livescore();
+      break;
+   case 'livescore_link':
+      $block['content'] = '<a href="http://www.livescore.in/baseball/" title="Baseball Livescore">Livescore</a>';
+     break;
+  }
+
+  return $block;
+}
+function nba_info_get_livescore() {
+if(strpos($con = ini_get("disable_functions"), "fsockopen") === false) { 
+  if(is_resource($fs = fsockopen("www.livescore.in", 80, $errno, $errstr, 3)) && !($stop = $write = !fwrite($fs, "GET /dk/free/lsapi HTTP/1.1\r\nHost: www.livescore.in\r\nConnection: Close\r\nlsfid: 418273\r\n\r\n"))) {
+    $content = "";
+    while (!$stop && !feof($fs)) {
+      $line = fgets($fs, 128);
+      ($write || $write = $line == "\r\n") && ($content .= $line);
+    }
+    fclose($fs);
+    $c = explode("\n", $content);
+    foreach($c as &$r) {
+      $r = preg_replace("/^[0-9A-Fa-f]+\r/", "", $r);
+    }
+    $content = implode("", $c);
+  } else $content .= $errstr."(".$errno.")<br />\n";
+} elseif(strpos($con, "file_get_contents") === false && ini_get("allow_url_fopen")) {
+  $content = file_get_contents("http://www.livescore.in/dk/free/lsapi", 0, stream_context_create(array("http" => array("timeout" => 3, "header" => "lsfid: 418273 "))));
+} elseif(extension_loaded("curl") && strpos($con, "curl_") === false) {
+  curl_setopt_array($curl = curl_init("http://www.livescore.in/dk/free/lsapi"), array(CURLOPT_RETURNTRANSFER => true, CURLOPT_HTTPHEADER => array("lsfid: 418273 ")));
+  $content = curl_exec($curl);curl_close($curl);
+} else {
+$content = "PHP inScore kan ikke indlæses. Spørg din web hosting udbyder for at tillade `file_get_contents`-funktionen sammen med `allow_url_fopen`-direktivet eller `fsockopen`-funktionen.";
+}
+return $content;
+}
